@@ -5,9 +5,9 @@ import Footer from "./Footer"
 function Layout() {
     return (
         <div className="w-full h-full flex flex-col items-center justify-center">
-            <AppBar/>
+            <AppBar />
             <Outlet />
-            <Footer/>
+            <Footer />
         </div>
     )
 }

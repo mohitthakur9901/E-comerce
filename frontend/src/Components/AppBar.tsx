@@ -57,7 +57,7 @@ function AppBar() {
               {link.name}
             </Link>
           ))}
-          <button className=' py-0.5 px-3'>Let's Talk</button>
+          <button className=' py-0.5 px-3'>sign in</button>
         </div>
       )}
     </div>

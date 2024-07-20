@@ -1,15 +1,7 @@
-import React from 'react'
 
 const Footer = () => {
     return (
         <>
-            {/*
-  Heads up! 👋
-
-  Plugins:
-    - @tailwindcss/forms
-*/}
-
             <footer className="bg-white">
                 <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
                     <div className="lg:grid lg:grid-cols-2">

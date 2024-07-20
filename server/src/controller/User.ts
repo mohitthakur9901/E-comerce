@@ -236,7 +236,9 @@ const updateProfileImgAndDeletePrevious = AsyncHandler(async (req, res) => {
 
 const refreshActionToken = AsyncHandler(async (req, res) => {
     try {
+     
         const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
+      
         if (!incomingRefreshToken) {
             throw new ApiError(401, "Unauthorized");
         }
