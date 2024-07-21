@@ -1,6 +1,7 @@
 import React from 'react';
 import InputWithLabel from "./Input";
 import Button from './Button';
+
 interface SignUpFormProps {
   formData: {
     username: string;
@@ -9,6 +10,7 @@ interface SignUpFormProps {
     lastName: string;
     password: string;
     profileImg: File | null;
+    profileImgPreview: string | null;
   };
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent) => void;
@@ -18,12 +20,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ formData, handleChange, handleS
   return (
     <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
-      <form onSubmit={handleSubmit} >
-      <div className="mb-4">
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">Profile Picture</label>
           <div className="flex items-center">
             <img
-              src="https://static.vecteezy.com/system/resources/thumbnails/006/487/917/small_2x/man-avatar-icon-free-vector.jpg"
+              src={formData.profileImgPreview || "https://static.vecteezy.com/system/resources/thumbnails/006/487/917/small_2x/man-avatar-icon-free-vector.jpg"}
               alt="Avatar Preview"
               className="w-16 h-16 rounded-full mr-4"
             />

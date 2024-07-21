@@ -52,7 +52,7 @@ const registerUser = AsyncHandler(async (req, res) => {
             throw new ApiError(409, "User with email or username already exists");
         };
         const profile = req.file?.path;
-        console.log(profile);
+
 
         if (!profile) {
             throw new ApiError(400, "Profile image is required");
@@ -241,9 +241,9 @@ const updateProfileImgAndDeletePrevious = AsyncHandler(async (req, res) => {
 
 const refreshActionToken = AsyncHandler(async (req, res) => {
     try {
-     
+
         const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
-      
+
         if (!incomingRefreshToken) {
             throw new ApiError(401, "Unauthorized");
         }

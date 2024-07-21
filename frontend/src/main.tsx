@@ -9,6 +9,7 @@ import SignIn from './Pages/SignInPage.tsx'
 import Render from './Components/Render.tsx'
 import ErrorPage from './Pages/ErrorPage.tsx'
 import ErrorBoundary from './Components/ErrorBoundary.tsx'
+import { Toaster } from 'react-hot-toast'
 
 
 const router = createBrowserRouter([
@@ -44,6 +45,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
    <ErrorBoundary> 
       <Suspense fallback={<Render />}>
         <RouterProvider router={router} />
+        <Toaster />
       </Suspense>
     </ErrorBoundary>
   </React.StrictMode>,

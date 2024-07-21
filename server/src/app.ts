@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 import userRoute from "./routes/User.Route"
 
 
-app.get("/" , (req,res) => {
+app.get("/api/v1/hello" , (req,res) => {
     res.send("hello")
 })
 
