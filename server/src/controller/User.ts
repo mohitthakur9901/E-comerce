@@ -182,7 +182,12 @@ const getUser = AsyncHandler(async (req, res) => {
 
 const getusers = AsyncHandler(async (req, res) => {
     try {
-        const users = await User.find();
+        let isAdmin = req.user?.role;
+        if (isAdmin !== "admin") {
+            throw new ApiError(403, "You are not authorized to access this resource");
+        }
+        const users = await User.find().select("-password");
+
         res.status(200).json(new ApiResponse(200, users, "Users fetched successfully"));
     } catch (error) {
         console.error(error);

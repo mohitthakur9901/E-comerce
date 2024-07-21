@@ -2,6 +2,7 @@ import mongoose, { Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+type Role = 'user' | 'admin';
 interface IUser extends Document {
     profileImg?: string
     username: string
@@ -9,6 +10,7 @@ interface IUser extends Document {
     lastName?: string
     email: string,
     password: string,
+    role : Role
     access_token: string;
     refresh_token: string;
 }
@@ -47,6 +49,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    },
     access_token: {
         type: String,
         default: ""
@@ -74,6 +81,7 @@ userSchema.methods.generateAccessToken = function () {
         username: this.username,
         email: this.email,
         firstName: this.firstName,
+        role : this.role
     }, process.env.ACCESS_TOKEN_SECRET as string, {
         expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
     })
