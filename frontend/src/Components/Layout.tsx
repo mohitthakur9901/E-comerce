@@ -4,11 +4,13 @@ import Footer from "./Footer"
 
 function Layout() {
     return (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-            <AppBar />
+        <div className="flex flex-col min-h-screen">
+        <AppBar />
+        <main className="flex-1">
             <Outlet />
-            <Footer />
-        </div>
+        </main>
+        <Footer />
+    </div>
     )
 }
 

@@ -13,13 +13,14 @@ app.use(express.urlencoded({ extended: true }));
 
 
 import userRoute from "./routes/User.Route"
-
+import productRouter from './routes/Prouct.Route'
 
 app.get("/api/v1/hello" , (req,res) => {
     res.send("hello")
 })
 
 app.use("/api/v1" , userRoute)
+app.use("/api/v1", productRouter)
 
 
 

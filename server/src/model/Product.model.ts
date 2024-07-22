@@ -12,7 +12,6 @@ interface Product {
 const ProductSchema = new mongoose.Schema<Product>({
     productImage: {
         type: String,
-        default: ""
     },
     productName: {
         type: String,

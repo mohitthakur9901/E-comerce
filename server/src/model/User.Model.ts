@@ -3,6 +3,11 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 type Role = 'user' | 'admin';
+
+interface ordersArray {
+    productId : mongoose.Types.ObjectId
+    quantity : number
+}
 interface IUser extends Document {
     profileImg?: string
     username: string
@@ -11,6 +16,7 @@ interface IUser extends Document {
     email: string,
     password: string,
     role : Role
+    orders: ordersArray[]
     access_token: string;
     refresh_token: string;
 }
@@ -54,6 +60,16 @@ const userSchema = new mongoose.Schema({
         enum: ['user', 'admin'],
         default: 'user'
     },
+    orders: [{
+        productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+        },
+        quantity: {
+            type: Number,
+            default: 1
+        }
+    }],
     access_token: {
         type: String,
         default: ""

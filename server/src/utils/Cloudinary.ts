@@ -11,14 +11,14 @@ interface CloudinaryUploadResponse {
     url: string;
 }
 
-const uploadOnCloudinary = async (filePath: any): Promise<CloudinaryUploadResponse> => {
+const uploadOnCloudinary = async (filePath: string): Promise<CloudinaryUploadResponse> => {
     if (!filePath) {
         throw new Error("File path is missing");
     }
 
     try {
         const result = await new Promise<UploadApiResponse>((resolve, reject) => {
-            cloudinary.uploader.upload(filePath, { resource_type: 'auto' }, (error: UploadApiErrorResponse | undefined, result: UploadApiResponse | undefined) => {
+            cloudinary.uploader.upload(filePath, { resource_type: 'image' }, (error: UploadApiErrorResponse | undefined, result: UploadApiResponse | undefined) => {
                 if (error || !result || !result.url) {
                     console.error("Cloudinary upload error:", error);
                     reject(new Error("Upload to Cloudinary failed"));

@@ -274,7 +274,6 @@ const refreshActionToken = AsyncHandler(async (req, res) => {
     }
 });
 
-
 const changeCurrentPassword = AsyncHandler(async (req, res) => {
     try {
         const { oldPassword, newPassword } = req.body;
@@ -330,6 +329,65 @@ const UpdateCurrentUser = AsyncHandler(async (req, res) => {
     }
 });
 
+const updateUserToAdmin = AsyncHandler(async (req, res) => {
+    console.log(req.user?._id);
+    try {
+        const userId  = req.user?._id;
+      
+        
+        const user = await User.findByIdAndUpdate(
+            userId,
+            {
+                $set: {
+                    role: "admin",
+                },
+            },
+            { new: true }
+        ).select("-password");
+        if (!user) {
+            throw new ApiError(404, "User not found");
+        }
+
+        res.status(200).json(new ApiResponse(200, user, "User updated to admin successfully"));
+    } catch (error) {
+        console.error(error);
+        if (error instanceof ApiError) {
+            res.status(error.statusCode).json(new ApiResponse(error.statusCode, null, error.message));
+        } else {
+            res.status(500).json(new ApiResponse(500, null, "Internal Server Error"));
+        }
+    }
+});
+
+
+const addToOrders = AsyncHandler(async (req, res) => {
+    try {
+        const { productId, quantity } = req.body;
+        const user = req.user;
+        if (!productId || !quantity) {
+            throw new ApiError(400, "All fields are required");
+        }
+        user.orders.push({ productId, quantity });
+        await user.save();
+        return res.json(new ApiResponse(200, user, "Order placed successfully"));
+    } catch (error) {
+        console.error(error);
+
+    }
+
+})
+
+const getAllOrders = AsyncHandler(async (req, res) => {
+    try {
+        const user = req.user?._id;
+        const orders = User.findById(user).select("orders");
+        return res.json(new ApiResponse(200, orders, "Orders fetched successfully"));
+    } catch (error) {
+        console.error(error);
+
+    }
+})
+
 export {
     registerUser,
     loginUser,
@@ -339,5 +397,8 @@ export {
     updateProfileImgAndDeletePrevious,
     refreshActionToken,
     changeCurrentPassword,
-    UpdateCurrentUser
+    UpdateCurrentUser,
+    updateUserToAdmin,
+    addToOrders,
+    getAllOrders
 }
