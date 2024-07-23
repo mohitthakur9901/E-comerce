@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SignUpForm from '../Components/SignUp';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface SignUpFormState {
   username: string;
@@ -22,8 +23,8 @@ const SignUp: React.FC = () => {
     profileImg: null,
     profileImgPreview: null,
   });
-  console.log(formData);
 
+  const navigate = useNavigate();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
     if (name === 'profileImg' && files && files[0]) {
@@ -53,8 +54,13 @@ const SignUp: React.FC = () => {
         method: 'POST',
         body: submitData,
       });
+      console.log(response);
+      
       const data = await response.json();
       if (data.success) {
+        console.log(data);
+        navigate('/signin')
+        
         toast.success('Signed up successfully');
       } else {
         toast.error(data.message);

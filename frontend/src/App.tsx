@@ -1,12 +1,23 @@
-import Card from "./Components/Card"
+
 
 function App() {
 
-  
+  async function Hello() {
+
+    const response = await fetch('/api/v1/hello',
+      {
+        method: 'GET',
+      }
+    )
+    const data = await response.json()
+    console.log(data);
+
+  }
+
 
   return (
     <>
-     <Card _id="1" addToCart={() => alert("hello")} productImage="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80" productName="t-shirt" productPrice="400" />
+      <button onClick={() => Hello()}>hello</button>
     </>
   )
 }

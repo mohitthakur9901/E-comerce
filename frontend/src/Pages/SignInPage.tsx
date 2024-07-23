@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import SignInForm from '../Components/SignIn';
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/user/userslice';
+import { useNavigate } from 'react-router-dom';
 interface SignUpFormState {
     email: string;
     password: string;
@@ -12,7 +15,9 @@ const SignIn: React.FC = () => {
         password: '',
     });
     console.log(formData);
-    
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -31,8 +36,12 @@ const SignIn: React.FC = () => {
                 body: JSON.stringify(formData),
             })
             const data = await response.json();
+            console.log(data.data);
+            
             if (data.success) {
                 toast.success(data.message);
+                dispatch(setUser(data.data));
+                navigate('/')
 
             } else {
                 toast.error(data.message);
