@@ -14,8 +14,6 @@ interface User {
     email: string;
     role: string;
     orders: OrdersArray[];
-    access_token: string;
-    refresh_token: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -29,8 +27,6 @@ const initialState: User = {
     email: '',
     role: '',
     orders: [],
-    access_token: '',
-    refresh_token: '',
     createdAt: new Date(),
     updatedAt: new Date(),
 };
@@ -40,13 +36,15 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action: PayloadAction<User>) => {
+            // Use Object.assign to ensure immutability
             return { ...state, ...action.payload };
         },
         clearUser: () => {
             return { ...initialState };
         },
+        
     },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, clearUser  } = userSlice.actions;
 export default userSlice.reducer;

@@ -8,10 +8,14 @@ import SignUp from './Pages/SignUpPage.tsx'
 import SignIn from './Pages/SignInPage.tsx'
 import Render from './Components/Render.tsx'
 import ErrorPage from './Pages/ErrorPage.tsx'
+import Cart from './Pages/Cart.tsx'
+import Men from './Pages/Men.tsx'
+import Women from './Pages/Women.tsx'
 import ErrorBoundary from './Components/ErrorBoundary.tsx'
 import { Toaster } from 'react-hot-toast'
 import { store } from './store/store.ts'
 import { Provider } from 'react-redux'
+import UserOrders from './Pages/UserOrders.tsx'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +26,26 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <App />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/men",
+        element: <Men />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/women",
+        element: <Women />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/myorders",
+        element: <UserOrders />,
         errorElement: <ErrorPage />,
       },
     ],

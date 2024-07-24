@@ -12,6 +12,8 @@ interface SignUpFormProps {
 }
 
 const SignInForm: React.FC<SignUpFormProps> = ({ formData, handleChange, handleSubmit }) => {
+ 
+
   return (
     <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>

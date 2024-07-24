@@ -1,17 +1,12 @@
 export const Links = [
     {
         id: 1,
-        name: "T-shirts",
-        link: "/t-shirts"
+        name: "Men",
+        link: "/men"
     },
     {
         id: 2,
-        name: "Shirts",
-        link: "/shirts"
-    },
-    {
-        id: 3,
-        name: "Pants",
-        link: "/pants"
-    },
+        name: "Women",
+        link: "/women"
+    }
 ]

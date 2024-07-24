@@ -107,9 +107,7 @@ const updateProuct = AsyncHandler(async (req, res) => {
     }
 });
 
-const getProduct = AsyncHandler(async (req, res) => {
-    // console.log(req.params);
-    
+const getProduct = AsyncHandler(async (req, res) => {    
     try {
         const { id } = req.params;
         const product = await Product.findById(id);

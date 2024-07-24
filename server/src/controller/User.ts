@@ -4,6 +4,7 @@ import AsyncHandler from "../utils/AsyncHandler";
 import { User } from "../model/User.Model";
 import { uploadOnCloudinary, deleteOnCloudinary } from "../utils/Cloudinary";
 import jwt from "jsonwebtoken";
+import Product from "../model/Product.model";
 
 
 const generateAccessAndRefreshToken = async (userId: any) => {
@@ -362,31 +363,95 @@ const updateUserToAdmin = AsyncHandler(async (req, res) => {
 
 const addToOrders = AsyncHandler(async (req, res) => {
     try {
-        const { productId, quantity } = req.body;
-        const user = req.user;
-        if (!productId || !quantity) {
-            throw new ApiError(400, "All fields are required");
+      // Expect an array of orders in the request body
+      const orders = req.body;
+      console.log(orders);
+  
+      if (!Array.isArray(orders) || orders.length === 0) {
+        return res.status(400).json(new ApiResponse(400, null, "No orders provided"));
+      }
+  
+      // Get the authenticated user
+      const user = req.user;
+  
+      if (!user) {
+        return res.status(401).json(new ApiResponse(401, null, "User not authenticated"));
+      }
+  
+      // Process each order
+      for (const { productId, quantity } of orders) {
+        if (!productId || !Number.isInteger(quantity) || quantity <= 0) {
+          return res.status(400).json(new ApiResponse(400, null, "Invalid order data"));
         }
-        user.orders.push({ productId, quantity });
-        await user.save();
-        return res.json(new ApiResponse(200, user, "Order placed successfully"));
+  
+        // Check if the productId is already in the user's orders
+        const existingOrder = user.orders.find((order: { productId: any; }) => order.productId === productId);
+  
+        if (existingOrder) {
+          // Update the existing order quantity
+          existingOrder.quantity += quantity;
+        } else {
+          // Add new order
+          user.orders.push({ productId, quantity });
+        }
+      }
+  
+      // Save the user with the updated orders
+      await user.save();
+  
+      // Return success response
+      return res.json(new ApiResponse(200, user, "Orders placed successfully"));
     } catch (error) {
-        console.error(error);
-
+      console.error(error);
+      return res.status(500).json(new ApiResponse(500, null, "Internal server error"));
     }
+  });
+  
 
-})
-
-const getAllOrders = AsyncHandler(async (req, res) => {
+  const getAllOrders = AsyncHandler(async (req, res) => {
     try {
-        const user = req.user?._id;
-        const orders = User.findById(user).select("orders");
-        return res.json(new ApiResponse(200, orders, "Orders fetched successfully"));
+        const userId = req.user
+
+        if (!userId) {
+            return res.json(new ApiResponse(401, null, "User not authenticated"));
+        }
+
+        // Fetch the user with their orders
+        const user = await User.findById(userId).select("orders");
+
+        if (!user) {
+            return res.json(new ApiResponse(404, null, "User not found"));
+        }
+
+        // Extract product IDs and quantities from the user's orders
+        const orders = user.orders;
+        const productIds = orders.map((order: { productId: any; }) => order.productId);
+        const quantityMap = orders.reduce((acc: Record<string, number>, order: { productId: any; quantity: number }) => {
+            acc[order.productId.toString()] = order.quantity;
+            return acc;
+        }, {});
+
+        if (productIds.length === 0) {
+            return res.json(new ApiResponse(404, null, "No orders found"));
+        }
+
+        // Fetch products based on the order product IDs
+        const products = await Product.find({ _id: { $in: productIds } });
+
+        // Map products to include quantity
+        const productsWithQuantity = products.map(product => ({
+            ...product.toObject(),
+            quantity: quantityMap[product._id.toString()] // Add the quantity
+        }));
+
+        return res.json(new ApiResponse(200, productsWithQuantity, "Orders fetched successfully"));
     } catch (error) {
         console.error(error);
-
+        return res.json(new ApiResponse(500, null, "Internal server error"));
     }
-})
+});
+
+
 
 export {
     registerUser,

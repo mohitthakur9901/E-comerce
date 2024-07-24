@@ -1,56 +1,125 @@
 import { useState } from 'react';
 import { Links } from '../data/links';
-import { Link, useLocation } from 'react-router-dom';
-import { CiMenuBurger } from "react-icons/ci";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { CiMenuBurger, CiShoppingCart } from "react-icons/ci";
 import { LiaTimesSolid } from "react-icons/lia";
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
+import Button from './Button';
+import { clearUser } from '../store/user/userslice';
 
 function AppBar() {
     const location = useLocation();
     const { pathname } = location;
     const [isOpen, setIsOpen] = useState(false);
-  
-  
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const { user } = useSelector((state: RootState) => state);
+    const navigate = useNavigate();
+
     const toggleMenu = () => {
-      setIsOpen(!isOpen);
+        setIsOpen(!isOpen);
     };
-    
-  return (
-    <div className='flex items-center justify-between p-5 '>
-      <h3>LOGO</h3>
-      <div className='hidden md:flex items-center gap-5'>
-        {Links.map((link) => (
-          <Link
-            to={link.link}
-            key={link.id}
-            className={`rounded-2xl py-0.5 px-3 `}
-          >
-            {link.name}
-          </Link>
-        ))}
-      </div>
-      <button className=' connect py-0.5 px-3 hidden md:block'>Let's Talk</button>
-      <button className='md:hidden py-0.5 px-3 transition ease-in-out ' onClick={toggleMenu}>
-        {
-          isOpen ?  <LiaTimesSolid/> : <CiMenuBurger/> 
-        }
-      </button>
-      {isOpen && (
-        <div className='absolute top-16 left-0 right-0 bg-gray-300 flex flex-col items-center gap-5 p-5 md:hidden rounded-b-2xl'>
-          {Links.map((link) => (
-            <Link
-              to={link.link}
-              key={link.id}
-              className={`rounded-2xl py-0.5 px-3 ${pathname === link.link ? 'bg-black text-white' : 'bg-slate-100'}`}
-              onClick={() => setIsOpen(false)} 
-            >
-              {link.name}
-            </Link>
-          ))}
-          <button className=' py-0.5 px-3'>sign in</button>
+
+    const toggleProfileMenu = () => {
+        setIsProfileOpen(!isProfileOpen);
+    };
+
+    return (
+        <div className='flex items-center justify-between p-5 bg-gray-800 text-white'>
+            <Link to={'/'}className='text-2xl font-bold'>LOGO</Link>
+            <div className='hidden md:flex items-center gap-5'>
+                {Links.map((link) => (
+                    <Link
+                        to={link.link}
+                        key={link.id}
+                        className={`rounded-2xl py-1 px-3 transition-colors duration-300 ${pathname === link.link ? 'bg-blue-600 text-white' : 'hover:bg-blue-600 hover:text-white'}`}
+                    >
+                        {link.name}
+                    </Link>
+                ))}
+            </div>
+            <div className="flex items-center gap-5">
+                <Button className='py-1 px-3' type='button' onClick={() => navigate('/cart')}>
+                    <CiShoppingCart className='h-6 w-6' />
+                </Button>
+                {user.email ? (
+                    <div className="relative">
+                        <Button type='button' onClick={toggleProfileMenu} className='bg-transparent hover:bg-transparent'>
+                            <img src={user.profileImg} alt="User" className="h-8 w-8 rounded-full" />
+                        </Button>
+                        {isProfileOpen && (
+                            <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-50 p-4">
+                                <div className="flex flex-col items-start">
+                                    <img src={user.profileImg} alt="User" className="h-16 w-16 rounded-full mb-3" />
+                                    <p><strong>Username:</strong> {user.username}</p>
+                                    <p><strong>First Name:</strong> {user.firstName}</p>
+                                    <p><strong>Last Name:</strong> {user.lastName}</p>
+                                    <p><strong>Email:</strong> {user.email}</p>
+                                    <Button className='w-full py-1 mt-2' type='button' onClick={() => {
+                                        clearUser()
+                                        navigate('/')
+                                    }}>Sign Out</Button>
+                                      <Button className='w-full py-1 mt-2' type='button' onClick={() => {
+                                        navigate('/myorders')
+                                    }}>Orders</Button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <>
+                        <Button className='py-1 px-3' type='button' onClick={() => navigate('/signin')}>Sign In</Button>
+                        <Button className='py-1 px-3' type='button' onClick={() => navigate('/signup')}>Sign Up</Button>
+                    </>
+                )}
+            </div>
+            <Button type='button' className='md:hidden py-1 px-3 transition ease-in-out' onClick={toggleMenu}>
+                {isOpen ? <LiaTimesSolid /> : <CiMenuBurger />}
+            </Button>
+            {isOpen && (
+                <div className='absolute top-16 left-0 right-0 bg-gray-300 text-black flex flex-col items-center gap-5 p-5 md:hidden rounded-b-2xl'>
+                    {Links.map((link) => (
+                        <Link
+                            to={link.link}
+                            key={link.id}
+                            className={`rounded-2xl py-1 px-3 transition-colors duration-300 ${pathname === link.link ? 'bg-black text-white' : 'hover:bg-blue-600 hover:text-white'}`}
+                            onClick={() => setIsOpen(false)}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                    {user.email ? (
+                        <>
+                            <Button className='py-1 px-3' type='button' onClick={toggleProfileMenu}>
+                                <img src={user.profileImg} alt="User" className="h-8 w-8 rounded-full" />
+                            </Button>
+                            {isProfileOpen && (
+                                <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-50 p-4">
+                                    <div className="flex flex-col items-start">
+                                        <img src={user.profileImg} alt="User" className="h-16 w-16 rounded-full mb-3" />
+                                        <p><strong>Username:</strong> {user.username}</p>
+                                        <p><strong>First Name:</strong> {user.firstName}</p>
+                                        <p><strong>Last Name:</strong> {user.lastName}</p>
+                                        <p><strong>Email:</strong> {user.email}</p>
+                                        <Button className='w-full py-1 mt-2' type='button' onClick={() => {
+                                            setIsOpen(false);
+                                            clearUser()
+                                            navigate('/')
+                                            }}>Sign Out</Button>
+                                    </div>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            <Button className='py-1 px-3' type='button' onClick={() => { setIsOpen(false); navigate('/signin'); }}>Sign In</Button>
+                            <Button className='py-1 px-3' type='button' onClick={() => { setIsOpen(false); navigate('/signup'); }}>Sign Up</Button>
+                        </>
+                    )}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default AppBar;

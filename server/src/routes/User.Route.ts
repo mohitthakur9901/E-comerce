@@ -2,7 +2,8 @@ import express from 'express';
 import { upload } from '../lib/Multer';
 import {
     registerUser, loginUser, logoutUser, UpdateCurrentUser, changeCurrentPassword,
-    getUser, getusers, refreshActionToken, updateProfileImgAndDeletePrevious , updateUserToAdmin ,addToOrders ,getAllOrders
+    getUser, getusers, refreshActionToken, updateProfileImgAndDeletePrevious , updateUserToAdmin ,addToOrders, 
+    getAllOrders
 } from '../controller/User';
 import { verfiyJWT } from '../middlewear/verify';
 
@@ -16,12 +17,12 @@ router.post('/update-profile', verfiyJWT, upload.single('profileImg'), updatePro
 router.post('/refresh', refreshActionToken)
 router.post('/change-password', verfiyJWT, changeCurrentPassword)
 router.get('/current-user', verfiyJWT, getUser)
-router.get('/users', getusers)
+router.get('/users',verfiyJWT, getusers)
 router.put('/update-user', verfiyJWT, UpdateCurrentUser)
 
 router.put('/user-to-admin', verfiyJWT, updateUserToAdmin);
 
 router.post('/add-to-orders', verfiyJWT, addToOrders);
-router.get('/get-all-orders', getAllOrders);
+router.get('/get-all-orders', verfiyJWT , getAllOrders);
 
 export default router;

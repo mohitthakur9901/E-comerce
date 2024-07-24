@@ -1,23 +1,15 @@
-
+import Cookies from 'js-cookie';
+import ProductPage from './Pages/ProductPage';
 
 function App() {
 
-  async function Hello() {
-
-    const response = await fetch('/api/v1/hello',
-      {
-        method: 'GET',
-      }
-    )
-    const data = await response.json()
-    console.log(data);
-
-  }
-
+  Cookies.set('access_token', 'your_token_value', { expires: 7 });
+  
 
   return (
     <>
-      <button onClick={() => Hello()}>hello</button>
+
+      <ProductPage/>
     </>
   )
 }
