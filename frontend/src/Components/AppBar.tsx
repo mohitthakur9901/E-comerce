@@ -3,10 +3,13 @@ import { Links } from '../data/links';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CiMenuBurger, CiShoppingCart } from "react-icons/ci";
 import { LiaTimesSolid } from "react-icons/lia";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import Button from './Button';
 import { clearUser } from '../store/user/userslice';
+import { clearCart } from '../store/cart/cartslice';
+import toast from 'react-hot-toast';
+
 
 function AppBar() {
     const location = useLocation();
@@ -15,6 +18,8 @@ function AppBar() {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const { user } = useSelector((state: RootState) => state);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
 
     const toggleMenu = () => {
         setIsOpen(!isOpen);
@@ -23,10 +28,18 @@ function AppBar() {
     const toggleProfileMenu = () => {
         setIsProfileOpen(!isProfileOpen);
     };
+    const signOut = () => {
+        dispatch(clearUser());
+        dispatch(clearCart());
+        toast.success('Logged out successfully')
+        navigate('/');
+    };
+
+
 
     return (
         <div className='flex items-center justify-between p-5 bg-gray-800 text-white'>
-            <Link to={'/'}className='text-2xl font-bold'>LOGO</Link>
+            <Link to={'/'} className='text-2xl font-bold'>LOGO</Link>
             <div className='hidden md:flex items-center gap-5'>
                 {Links.map((link) => (
                     <Link
@@ -51,15 +64,11 @@ function AppBar() {
                             <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg z-50 p-4">
                                 <div className="flex flex-col items-start">
                                     <img src={user.profileImg} alt="User" className="h-16 w-16 rounded-full mb-3" />
-                                    <p><strong>Username:</strong> {user.username}</p>
-                                    <p><strong>First Name:</strong> {user.firstName}</p>
-                                    <p><strong>Last Name:</strong> {user.lastName}</p>
-                                    <p><strong>Email:</strong> {user.email}</p>
                                     <Button className='w-full py-1 mt-2' type='button' onClick={() => {
-                                        clearUser()
-                                        navigate('/')
-                                    }}>Sign Out</Button>
-                                      <Button className='w-full py-1 mt-2' type='button' onClick={() => {
+                                        navigate('/profile')
+                                    }}>Profile</Button>
+                                    <Button className='w-full py-1 mt-2' type='button' onClick={signOut}>Sign Out</Button>
+                                    <Button className='w-full py-1 mt-2' type='button' onClick={() => {
                                         navigate('/myorders')
                                     }}>Orders</Button>
                                 </div>
@@ -105,7 +114,7 @@ function AppBar() {
                                             setIsOpen(false);
                                             clearUser()
                                             navigate('/')
-                                            }}>Sign Out</Button>
+                                        }}>Sign Out</Button>
                                     </div>
                                 </div>
                             )}

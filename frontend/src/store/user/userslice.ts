@@ -36,11 +36,11 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action: PayloadAction<User>) => {
-            // Use Object.assign to ensure immutability
             return { ...state, ...action.payload };
         },
         clearUser: () => {
-            return { ...initialState };
+            return initialState;
+            
         },
         
     },

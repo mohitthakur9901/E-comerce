@@ -16,6 +16,7 @@ import { Toaster } from 'react-hot-toast'
 import { store } from './store/store.ts'
 import { Provider } from 'react-redux'
 import UserOrders from './Pages/UserOrders.tsx'
+import Profile from './Pages/UserProfile.tsx'
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,11 @@ const router = createBrowserRouter([
       {
         path: "/myorders",
         element: <UserOrders />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
         errorElement: <ErrorPage />,
       },
     ],
