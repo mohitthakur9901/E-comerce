@@ -10,13 +10,24 @@ services:
       - mongo-data:/data/db
 
   app:
-    build: .
+    build:
+      context: ../server
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     env_file:
-      - .env
+      - ../server/.env
     depends_on:
       - mongo
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80"
+    depends_on:
+      - app
 
 volumes:
   mongo-data:

@@ -55,9 +55,8 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="">
+    <div >
       <CarouselCard/>
-
       <ProductPage handleAddToCart={handleAddToCart} products={products} />
     </div>
   );
