@@ -1,13 +1,15 @@
-version: '3.8'
+version: "3.8"
 
 services:
   mongo:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - "27018:27017"
+      - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+      - web-network
 
   app:
     build:
@@ -15,10 +17,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    env_file:
-      - ../server/.env
+    environment:
+      MONGODB_URI: mongodb://mongo:27017
     depends_on:
       - mongo
+    networks:
+      - web-network
 
   frontend:
     build:
@@ -28,6 +32,11 @@ services:
       - "3001:80"
     depends_on:
       - app
+    networks:
+      - web-network
 
 volumes:
   mongo-data:
+
+networks:
+  web-network:

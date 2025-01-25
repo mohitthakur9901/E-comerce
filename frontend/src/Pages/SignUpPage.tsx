@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SignUpForm from '../Components/SignUp';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { backendUrl } from '../data/links';
 
 interface SignUpFormState {
   username: string;
@@ -50,7 +51,7 @@ const SignUp: React.FC = () => {
       submitData.append('profileImg', formData.profileImg);
     }
     try {
-      const response = await fetch('/api/v1/register', {
+      const response = await fetch(`${backendUrl}/api/v1/register`, {
         method: 'POST',
         body: submitData,
       });

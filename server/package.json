@@ -5,8 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "npx nodemon src/index.ts",
-    "build": "tsc",
-    "serve": "npx nodemon dist/index.js"
+    "build": "tsc -b",
+    "serve": "npm run build && node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +33,5 @@
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
-  },
-  "Transform": "AWS::Serverless-2016-10-31"
+  }
 }

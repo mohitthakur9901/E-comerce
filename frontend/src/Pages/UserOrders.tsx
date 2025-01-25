@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { backendUrl } from '../data/links';
 
 interface Product {
     _id: string;
@@ -32,7 +33,7 @@ const UserOrders = () => {
 
         async function fetchOrders() {
             try {
-                const response = await fetch(`/api/v1/get-all-orders`, {
+                const response = await fetch(`${backendUrl}/api/v1/get-all-orders`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${accessToken}`

@@ -20,7 +20,7 @@ connectDb().then(() => {
         
         console.log(`server is running on http://localhost:${process.env.PORT}`);
     })
-    app.on("error", (err) => {
+    app.on("error", (err: any) => {
         console.log(err);
     })
 }).catch((err) => {

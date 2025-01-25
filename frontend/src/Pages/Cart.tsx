@@ -5,6 +5,7 @@ import Button from '../Components/Button';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { backendUrl } from '../data/links';
 
 const Cart = () => {
   const { items } = useSelector((state: RootState) => state.cart);
@@ -37,7 +38,7 @@ const Cart = () => {
       const order = items.map(item => ({ productId: item.productId, quantity: item.productQuantity }));
       console.log(order);
       
-      const response = await fetch("/api/v1/add-to-orders", {
+      const response = await fetch(`${backendUrl}/api/v1/add-to-orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

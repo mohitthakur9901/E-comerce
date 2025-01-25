@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/user/userslice';
 import { useNavigate } from 'react-router-dom';
+import { backendUrl } from '../data/links';
 interface SignUpFormState {
     email: string;
     password: string;
@@ -28,7 +29,7 @@ const SignIn: React.FC = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('/api/v1/login', {
+            const response = await fetch(`${backendUrl}/api/v1/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
